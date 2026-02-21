@@ -1,17 +1,43 @@
 pkgname=simpmusic
-pkgver=1.0.0
+pkgver=1.0.3
 pkgrel=1
+pkgdesc="SimpMusic - A music streaming app"
 arch=('x86_64')
-depends=('gtk3' 'libnotify')
-source=('https://example.com/simpmusic-$pkgver.tar.gz')
+url="https://github.com/maxrave-dev/SimpMusic"
+license=('GNU')
+depends=('libnotify' 'nss' 'gtk3' 'xdg-utils' 'at-spi2-core' 'libxss' 'libxtst')
+options=('!strip')
+
+source=("${pkgname}_${pkgver}_amd64.deb::https://github.com/maxrave-dev/SimpMusic/releases/download/v${pkgver}/simpmusic_${pkgver}_amd64.deb")
 sha256sums=('SKIP')
 
-build() {
-    cd "$srcdir/simpmusic-$pkgver"
-    make
+prepare() {
+    cd "$srcdir"
+    ar x "${pkgname}_${pkgver}_amd64.deb"
+
+    if [ -f data.tar.xz ]; then
+        tar xf data.tar.xz
+    elif [ -f data.tar.gz ]; then
+        tar xf data.tar.gz
+    elif [ -f data.tar.zst ]; then
+        tar xf data.tar.zst
+    fi
 }
 
 package() {
-    cd "$srcdir/simpmusic-$pkgver"
-    install -Dm755 simpmusic "$pkgdir/usr/bin/simpmusic"
+    cd "$srcdir"
+
+    install -dm755 "$pkgdir/opt"
+    cp -r opt/simpmusic "$pkgdir/opt/simpmusic"
+
+    install -dm755 "$pkgdir/usr/bin"
+    ln -sf /opt/simpmusic/bin/SimpMusic "$pkgdir/usr/bin/simpmusic"
+
+    install -dm755 "$pkgdir/usr/share/applications"
+    install -Dm644 opt/simpmusic/lib/simpmusic-SimpMusic.desktop \
+        "$pkgdir/usr/share/applications/simpmusic.desktop"
+
+    install -dm755 "$pkgdir/usr/share/pixmaps"
+    install -Dm644 opt/simpmusic/lib/SimpMusic.png \
+        "$pkgdir/usr/share/pixmaps/simpmusic.png"
 }
