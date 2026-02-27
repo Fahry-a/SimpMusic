@@ -1,5 +1,5 @@
 pkgname=simpmusic
-pkgver=1.0.3
+pkgver=1.0.4
 pkgrel=1
 pkgdesc="SimpMusic - A music streaming app"
 arch=('x86_64')
@@ -9,7 +9,7 @@ depends=('libnotify' 'nss' 'gtk3' 'xdg-utils' 'at-spi2-core' 'libxss' 'libxtst')
 options=('!strip')
 
 source=("${pkgname}_${pkgver}_amd64.deb::https://github.com/maxrave-dev/SimpMusic/releases/download/v${pkgver}/simpmusic_${pkgver}_amd64.deb")
-sha256sums=('SKIP')
+sha256sums=('9b1c0502eddc01b5bf4624a96736c5bc9bbf92b0db9d73fca08c52b8e833cb7a')
 
 prepare() {
     cd "$srcdir"
